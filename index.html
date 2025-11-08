@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Corazón Morado Neón — Corazón más grande</title>
+<style>
+  :root{
+    --bg:#0f0f14;
+    --panel:#141418;
+    --neonA:#f0d9ff;
+    --neonB:#d49bff;
+    --neonC:#7a3bff;
+    --text:#f7f6fb;
+  }
+
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(180deg,var(--bg), #07070a 85%);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    box-sizing:border-box;
+  }
+
+  .stage{
+    width:100%;
+    max-width:1400px; /* contenedor mayor para permitir corazón muy grande */
+    margin:0 auto;
+  }
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:34px;
+    box-shadow: 0 14px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    text-align:center;
+  }
+
+  /* --- CORAZÓN MUCHO MÁS GRANDE --- */
+  .heart-wrap{
+    width:100%;
+    max-width:1300px; /* <-- aquí aumenté para que el corazón sea mucho más grande */
+    margin:6px auto 18px;
+    position:relative;
+    aspect-ratio: 16/11;
+  }
+
+  svg{ width:100%; height:100%; display:block; }
+
+  /* Trazo más grueso y dash más largo para la animación proporcional al nuevo tamaño */
+  .heart-stroke{
+    fill:none;
+    stroke: url(#grad);
+    stroke-width:9.5;               /* más grueso para escala mayor */
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter: url(#glow);
+    stroke-dasharray: 1700;         /* valor grande para cubrir el path en el tamaño aumentado */
+    stroke-dashoffset: 1700;
+    animation: draw 2.1s cubic-bezier(.35,.9,.18,1) 0.2s forwards,
+               neonPulse 1.9s ease-in-out 4.2s infinite;
+  }
+
+  .heart-fill{
+    fill: url(#fillGrad);
+    fill-opacity:0;
+    filter: url(#glow-soft);
+    transform-origin:50% 50%;
+    animation: fillIn 1.6s ease 1.9s forwards,
+               neonPulse 1.9s ease-in-out 4.2s infinite;
+  }
+
+  /* -> IMPORTANT: tamaño de la letra interior NO se aumentó */
+  .inside-text{
+    position:absolute;
+    left:50%;
+    top:48%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    width:54%;                       /* ancho limitado para que el texto quepa dentro */
+    font-size: clamp(10px, 1.6vw, 18px); /* tamaño la misma escala contenida: NO aumenta con el corazón grande */
+    font-weight:700;
+    color:#fff;
+    line-height:1.02;
+    word-break:break-word;
+    text-align:center;
+    text-shadow:
+      0 0 12px rgba(240,217,255,0.95),
+      0 0 28px rgba(216,110,255,0.55);
+  }
+
+  .signature{
+    margin-top:20px;
+    color: #efeaff;
+    font-weight:600;
+    font-size:17px;
+    opacity:0.97;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  }
+
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes fillIn {
+    0% { fill-opacity: 0; transform: scale(0.985); }
+    60% { fill-opacity: 0.92; transform: scale(1.02); }
+    100% { fill-opacity: 0.96; transform: scale(1); }
+  }
+  @keyframes neonPulse {
+    0% { filter: drop-shadow(0 0 12px rgba(240,217,255,0.82)) drop-shadow(0 0 36px rgba(122,59,255,0.45)); }
+    50% { filter: drop-shadow(0 0 24px rgba(240,217,255,1)) drop-shadow(0 0 56px rgba(122,59,255,0.78)); }
+    100% { filter: drop-shadow(0 0 12px rgba(240,217,255,0.82)) drop-shadow(0 0 36px rgba(122,59,255,0.45)); }
+  }
+
+  /* Móviles: reducimos el máximo para que se ajuste bien en pantallas pequeñas */
+  @media (max-width:520px){
+    .stage{ padding:10px; }
+    .card{ padding:18px; }
+    .heart-wrap{ max-width:100%; aspect-ratio: 1; }
+    .inside-text{ width:72%; font-size:16px; top:50%; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card" role="img" aria-label="Corazón morado neón tamaño grande">
+      <div class="heart-wrap">
+        <svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="false">
+          <defs>
+            <linearGradient id="grad" x1="0" x2="1">
+              <stop offset="0%" stop-color="#f0d9ff"/>
+              <stop offset="45%" stop-color="#d49bff"/>
+              <stop offset="100%" stop-color="#7a3bff"/>
+            </linearGradient>
+
+            <radialGradient id="fillGrad" cx="45%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#fff0ff" stop-opacity="0.18"/>
+              <stop offset="45%" stop-color="#cfa8ff" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="#7a3bff" stop-opacity="0.94"/>
+            </radialGradient>
+
+            <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+              <feGaussianBlur stdDeviation="4.5" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <filter id="glow-soft" x="-90%" y="-90%" width="280%" height="280%">
+              <feGaussianBlur stdDeviation="9" result="blur2"/>
+              <feMerge>
+                <feMergeNode in="blur2"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- misma forma del corazón, que ahora escala al tamaño mucho mayor del contenedor -->
+          <path class="heart-fill"
+            d="M100 150
+               C60 120, 20 92, 36 58
+               C50 28, 86 32, 100 56
+               C114 32, 150 28, 164 58
+               C180 92, 140 120, 100 150 Z"/>
+          <path class="heart-stroke"
+            d="M100 150
+               C60 120, 20 92, 36 58
+               C50 28, 86 32, 100 56
+               C114 32, 150 28, 164 58
+               C180 92, 140 120, 100 150 Z"/>
+        </svg>
+
+        <div class="inside-text">Suerte en tu<br>presentación</div>
+      </div>
+
+      <div class="signature">Att: Tu cuchurrumin (Levi) <br> Te amo 💜</div>
+    </div>
+  </div>
+</body>
+</html>
